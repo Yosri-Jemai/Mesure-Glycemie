@@ -1,6 +1,4 @@
-package com.example.yosrijemai_lsi3_mesure_glycemie;
-
-
+package com.example.yosrijemai_lsi3_mesure_glycemie.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -14,8 +12,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yosrijemai_lsi3_mesure_glycemie.R;
+
 public class MainActivity extends AppCompatActivity {
-    //Question1
     private TextView TVAge;
     private SeekBar sbAge;
     private RadioButton BtnOui;
@@ -23,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText ETValMes;
     private Button BtnConsulter;
     private TextView text;
-
-    //Question 2
     private void init() {
         TVAge = findViewById(R.id.agetext);
         sbAge = findViewById(R.id.sbAge);
@@ -33,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         ETValMes = findViewById(R.id.etValeur);
         BtnConsulter = findViewById(R.id.consulterBtn);
         text = findViewById(R.id.result);
-        //Question 3
         sbAge.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @SuppressLint("SetTextI18n")
             @Override
