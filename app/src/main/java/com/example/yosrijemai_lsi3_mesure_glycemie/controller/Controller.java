@@ -3,22 +3,22 @@ package com.example.yosrijemai_lsi3_mesure_glycemie.controller;
 import com.example.yosrijemai_lsi3_mesure_glycemie.model.Patient;
 
 public class Controller {
+
     public Patient patient;
+    public Controller() {}
+    public int createPatient(int age, String vm, boolean jeuner) {
+        if (age <= 0 && vm.isEmpty()) {
+            return 1;
+        }else if( age <=0)
+            return -1;
+        else if (vm.isEmpty())
+            return -2;
 
-    public Controller(){
-
+        patient = new Patient(age, vm, jeuner);
+        return 0;
+    }
+    public String getReponse(){
+        return patient.getRes();
     }
 
-    public void createPatient(int age, boolean jeunez, float mesure){
-        this.patient = new Patient(age, jeunez, mesure);
-    }
-
-    public void getResponse(){
-        if(patient != null){
-            this.patient.calculer();
-        }
-        else {
-            System.out.println("Patient non initialisé");
-        }
-    }
 }

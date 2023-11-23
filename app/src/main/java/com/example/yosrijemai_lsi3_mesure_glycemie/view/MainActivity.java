@@ -8,11 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yosrijemai_lsi3_mesure_glycemie.R;
+import com.example.yosrijemai_lsi3_mesure_glycemie.controller.Controller;
 
 public class MainActivity extends AppCompatActivity {
     private TextView TVAge;
@@ -22,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText ETValMes;
     private Button BtnConsulter;
     private TextView text;
+    private RadioGroup radio;
+    private boolean jeuner;
+    @SuppressLint("WrongViewCast")
     private void init() {
+        radio = findViewById(R.id.radioB);
         TVAge = findViewById(R.id.agetext);
         sbAge = findViewById(R.id.sbAge);
         BtnOui = findViewById(R.id.rbtOui);
@@ -48,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton selectedRadioButton = findViewById(checkedId);
+                String selectedValue = selectedRadioButton.getText().toString();
+                jeuner = selectedValue.equals("Oui");
+            }
+        });
+
 
         BtnConsulter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,45 +71,24 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("age =" + age);
                 String valmesure = (ETValMes.getText().toString());
                 System.out.println("val =" + valmesure);
-                if (age == 0 && valmesure.isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"Age and valeur mesure invalide", Toast.LENGTH_SHORT).show();
-                } else if (age == 0) {
-                    Toast.makeText(getApplicationContext(),"Age invalide", Toast.LENGTH_SHORT).show();
-                } else if (valmesure.isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"Valeur mesure invalide", Toast.LENGTH_SHORT).show();
+                Controller controller = new Controller();
+                int inputIsValid = controller.createPatient(age,valmesure,jeuner);
+                if (inputIsValid == 1 ) {
+                    Toast.makeText(getApplicationContext(), "L'âge et la valeur de mesure sont invalides", Toast.LENGTH_SHORT).show();
+                } else if (inputIsValid == -1) {
+                    Toast.makeText(getApplicationContext(), "L'âge est invalide", Toast.LENGTH_SHORT).show();
+
+                } else if (inputIsValid ==-2) {
+                    Toast.makeText(getApplicationContext(), "la valeur de mesure est invalide", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    float valMes = Float.parseFloat(valmesure);
-                    boolean jeun = BtnOui.isChecked();
-                    if (jeun) {
-                        if (age > 13) {
-                            if (valMes >= 5.0 && valMes <= 7.2) {
-                                text.setText("Niveau de glycémie est normale");
-                            } else if (valMes < 5.0) {
-                                text.setText("Niveau de glycémie est trop bas");
-                            } else if (valMes > 7.2) {
-                                text.setText("Niveau de glycémie est trop élevée");
-                            }
-                        } else if (age >= 6 && age <= 12) {
-                            if (valMes >= 5.0 && valMes <= 10.0) {
-                                text.setText("Niveau de glycémie est normale");
-                            } else {
-                                text.setText("Niveau de glycémie est trop bas");
-                            }
-                        } else if (age < 6) {
-                            if (valMes >= 5.5 && valMes <= 10.0) {
-                                text.setText("Niveau de glycémie est normale");
-                            } else {
-                                text.setText("Niveau de glycémie est trop bas");
-                            }
-                        }
-                    } else {
-                        if (valMes < 10.5) {
-                            text.setText("Niveau de glycémie est normale");
-                        } else {
-                            text.setText("Niveau de glycémie est trop élevée");
-                        }
-                    }
+                    controller.patient.calcule();
+                    text.setText(controller.getReponse());
+                    ETValMes.setText("");
+                    sbAge.setProgress(0);
                 }
+
+
             }
         });
     }
