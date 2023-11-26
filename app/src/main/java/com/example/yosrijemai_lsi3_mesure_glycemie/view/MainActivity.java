@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.yosrijemai_lsi3_mesure_glycemie.R;
 import com.example.yosrijemai_lsi3_mesure_glycemie.controller.Controller;
-
 public class MainActivity extends AppCompatActivity {
     private TextView TVAge;
     private SeekBar sbAge;
@@ -45,11 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 TVAge.setText("Votre âge : " + progress);
                 // Mise à jour du TextView par la valeur: progress à chaque changement.
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
@@ -62,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 jeuner = selectedValue.equals("Oui");
             }
         });
-
-
         BtnConsulter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,22 +72,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "L'âge et la valeur de mesure sont invalides", Toast.LENGTH_SHORT).show();
                 } else if (inputIsValid == -1) {
                     Toast.makeText(getApplicationContext(), "L'âge est invalide", Toast.LENGTH_SHORT).show();
-
                 } else if (inputIsValid ==-2) {
                     Toast.makeText(getApplicationContext(), "la valeur de mesure est invalide", Toast.LENGTH_SHORT).show();
-
                 } else {
                     controller.patient.calcule();
                     text.setText(controller.getReponse());
                     ETValMes.setText("");
                     sbAge.setProgress(0);
                 }
-
-
             }
         });
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
